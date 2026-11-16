@@ -1,0 +1,34 @@
+GUCCI COLLECTION
+TWO INSTRUMENTS. ONE SIGNATURE SOUND.
+
+ZAY KEYS — Vintage Keyboard Instrument
+Bring classic keyboard-inspired sounds into your productions.
+
+ZAY KEYS is a virtual instrument built around a keyboard-focused experience, inspired by the melodic identity of classic Trap and Hip-Hop production. Its purpose is to give producers a dedicated space for creating melodies, chords, progressions, and musical ideas with a distinctive vintage-inspired character.
+
+Designed for:
+- Melodies and chord progressions
+- Trap and Hip-Hop production
+- Vintage-inspired keyboard sounds
+- Building musical ideas and arrangements
+
+Classic keys. Southern vibes. Timeless melodies.
+
+MPC3000 SIMULATOR — Vintage Sampling Instrument
+Bring a classic sampling-inspired workflow into your studio.
+
+MPC3000 SIMULATOR is a virtual instrument inspired by the legendary MPC3000 and its place in Hip-Hop production history. It is designed around a sampling-oriented experience, giving producers a dedicated environment for working with samples, creating drum patterns, and exploring classic beat-making approaches.
+
+Designed for:
+- Sample-based production
+- Drum patterns and beat construction
+- Classic Hip-Hop-inspired workflows
+- Vintage-inspired production aesthetics
+
+Classic sampling. Raw drums. Legendary groove.
+
+INSTALLATION
+Select one or both instruments. The default VST3 destination is:
+C:\Program Files\Common Files\VST3
+
+After installation, open your DAW and scan for new plugins if they do not appear automatically.
