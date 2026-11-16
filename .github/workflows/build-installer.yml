@@ -1,0 +1,102 @@
+
+name: Build GUCCI COLLECTION Installer
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build-installer:
+    name: Build Windows Installer
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate VST3 plugins
+        shell: pwsh
+        run: |
+          $plugins = @(
+            "payload/ZAY KEYS.vst3",
+            "payload/MPC3000 SIMULATOR.vst3"
+          )
+
+          foreach ($plugin in $plugins) {
+            $binary = Join-Path $plugin "Contents/x86_64-win"
+
+            if (!(Test-Path $plugin -PathType Container)) {
+              throw "Plugin folder missing: $plugin"
+            }
+
+            if (!(Test-Path $binary -PathType Container)) {
+              throw "Windows x64 VST3 binary folder missing: $binary"
+            }
+
+            $files = Get-ChildItem $binary -File
+
+            if ($files.Count -eq 0) {
+              throw "No VST3 binary found in: $binary"
+            }
+
+            Write-Host "Validated: $plugin"
+          }
+
+      - name: Install Inno Setup 6
+        shell: pwsh
+        run: |
+          choco install innosetup --yes --no-progress
+
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+
+          $script = "GUCCI_COLLECTION.iss"
+
+          if (!(Test-Path $script)) {
+            throw "GUCCI_COLLECTION.iss not found in repository root."
+          }
+
+          if (!(Test-Path $iscc)) {
+            throw "Inno Setup compiler not found."
+          }
+
+          & $iscc "/Qp" $script
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "Installer compilation failed."
+          }
+
+      - name: Verify installer
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem "output" -Filter "*.exe" -File |
+            Select-Object -First 1
+
+          if (!$installer) {
+            throw "Installer EXE was not generated."
+          }
+
+          if ($installer.Length -lt 1MB) {
+            throw "Installer EXE is unexpectedly small."
+          }
+
+          Write-Host "Installer successfully generated:"
+          Write-Host $installer.FullName
+
+          Get-FileHash $installer.FullName -Algorithm SHA256
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: GUCCI-COLLECTION-Windows-Installer
+          path: output/*.exe
+          if-no-files-found: error
+          retention-days: 30
